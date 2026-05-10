@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
         // tell UI elements what to show
         healthui.SetHealth(hp);
         manaui.SetSpellCaster(spellcaster);
-        spellui.SetSpell(spellcaster.spells[0]);
+        if (spellcaster.spells.Count > 0)
+            spellui.SetSpell(spellcaster.spells[0]);
     }
 
     // Update is called once per frame

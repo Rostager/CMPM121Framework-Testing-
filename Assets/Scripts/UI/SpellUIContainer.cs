@@ -5,9 +5,18 @@ public class SpellUIContainer : MonoBehaviour
     public GameObject[] spellUIs;
     public PlayerController player;
 
+    private SpellUI[] cachedUIs;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Cache SpellUI components upfront to avoid per-call GetComponent calls.
+        cachedUIs = new SpellUI[spellUIs.Length];
+        for (int i = 0; i < spellUIs.Length; i++)
+        {
+            cachedUIs[i] = spellUIs[i].GetComponent<SpellUI>();
+        }
+
         // we only have one spell (right now)
         spellUIs[0].SetActive(true);
         for(int i = 1; i< spellUIs.Length; ++i)
@@ -26,10 +35,9 @@ public class SpellUIContainer : MonoBehaviour
         {
             bool hasSpell = i < spells.Count;
             spellUIs[i].SetActive(hasSpell);
-            if (hasSpell)
+            if (hasSpell && cachedUIs[i] != null)
             {
-                var ui = spellUIs[i].GetComponent<SpellUI>();
-                if (ui != null) ui.SetSpell(spells[i]);
+                cachedUIs[i].SetSpell(spells[i]);
             }
         }
     }
